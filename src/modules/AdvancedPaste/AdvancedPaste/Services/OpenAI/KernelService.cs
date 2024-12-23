@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System;
 
 using AdvancedPaste.Models;
 using Azure.AI.OpenAI;
