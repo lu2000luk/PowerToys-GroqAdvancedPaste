@@ -27,7 +27,7 @@ public sealed class KernelService(IKernelQueryCacheService queryCacheService, IA
         };
         
     #pragma warning disable SKEXP0010
-    protected override void AddChatCompletionService(IKernelBuilder kernelBuilder) => kernelBuilder.AddOpenAIChatCompletion(ModelName, _aiCredentialsProvider.Key, new Uri("https://api.groq.com/openai/v1"));
+    protected override void AddChatCompletionService(IKernelBuilder kernelBuilder) => kernelBuilder.AddOpenAIChatCompletion(ModelName, _aiCredentialsProvider.Key, "https://api.groq.com/openai/v1");
 
     protected override AIServiceUsage GetAIServiceUsage(ChatMessageContent chatMessage) =>
         chatMessage.Metadata?.GetValueOrDefault("Usage") is CompletionsUsage completionsUsage
