@@ -16,7 +16,7 @@ public sealed class KernelService(IKernelQueryCacheService queryCacheService, IA
 {
     private readonly IAICredentialsProvider _aiCredentialsProvider = aiCredentialsProvider;
 
-    protected override string ModelName => "gpt-4o";
+    protected override string ModelName => "llama-3.3-70b-versatile";
 
     protected override PromptExecutionSettings PromptExecutionSettings =>
         new OpenAIPromptExecutionSettings()
@@ -25,7 +25,7 @@ public sealed class KernelService(IKernelQueryCacheService queryCacheService, IA
             Temperature = 0.01,
         };
 
-    protected override void AddChatCompletionService(IKernelBuilder kernelBuilder) => kernelBuilder.AddOpenAIChatCompletion(ModelName, _aiCredentialsProvider.Key);
+    protected override void AddChatCompletionService(IKernelBuilder kernelBuilder) => kernelBuilder.AddOpenAIChatCompletion(ModelName, _aiCredentialsProvider.Key, new OpenAIChatCompletionOptions { BaseUrl = "https://api.groq.com/openai/v1" });
 
     protected override AIServiceUsage GetAIServiceUsage(ChatMessageContent chatMessage) =>
         chatMessage.Metadata?.GetValueOrDefault("Usage") is CompletionsUsage completionsUsage
