@@ -2,8 +2,8 @@
 // The Microsoft Corporation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 using AdvancedPaste.Models;
 using Azure.AI.OpenAI;
@@ -24,11 +24,9 @@ public sealed class KernelService(IKernelQueryCacheService queryCacheService, IA
         {
             ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
             Temperature = 0.01,
-        };
-        
+        }; 
     #pragma warning disable SKEXP0010
     protected override void AddChatCompletionService(IKernelBuilder kernelBuilder) => kernelBuilder.AddOpenAIChatCompletion(ModelName, _aiCredentialsProvider.Key, "https://api.groq.com/openai/v1");
-
     protected override AIServiceUsage GetAIServiceUsage(ChatMessageContent chatMessage) =>
         chatMessage.Metadata?.GetValueOrDefault("Usage") is CompletionsUsage completionsUsage
             ? new(PromptTokens: completionsUsage.PromptTokens, CompletionTokens: completionsUsage.CompletionTokens)
