@@ -18,6 +18,9 @@ jobs:
 
     - name: Setup Visual Studio
       uses: microsoft/setup-msbuild@v1.1
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
 
     - name: Install WiX Toolset
       run: |
@@ -25,6 +28,9 @@ jobs:
         .\wix314.exe /install /quiet
         curl -LO https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip
         7z x wix314-binaries.zip wix.targets -o"C:\Program Files (x86)\WiX Toolset v3.14"
+        
+    - name: Restore NuGet packages for PowerToys
+      run: nuget restore PowerToys.sln
 
     - name: Build PowerToys Solution
       run: |
@@ -53,4 +59,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PowerToys-Installer
-        path: installer\PowerToysSetup\x64\Release\PowerToysSetup.exe
+        path: installer\PowerToysSetup\x64\Release\PowerToysSetup.msi
