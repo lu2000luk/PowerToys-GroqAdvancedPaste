@@ -1,0 +1,63 @@
+name: Build PowerToys Installer
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+        fetch-depth: 0
+
+    - name: Setup Visual Studio
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '[17.4,)'
+
+    - name: Setup Windows SDK
+      uses: microsoft/setup-windows-sdk-action@v1
+      with:
+        sdk-version: 19041
+
+    - name: Install WiX Toolset
+      run: |
+        curl -LO https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314.exe
+        .\wix314.exe /install /quiet
+        curl -LO https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip
+        7z x wix314-binaries.zip wix.targets -o"C:\Program Files (x86)\WiX Toolset v3.14"
+
+    - name: Build PowerToys Solution
+      run: |
+        msbuild PowerToys.sln -p:Platform=x64 -p:Configuration=Release
+
+    - name: Build Bug Report Tool
+      run: |
+        nuget restore tools\BugReportTool\BugReportTool.sln
+        msbuild tools\BugReportTool\BugReportTool.sln -p:Platform=x64 -p:Configuration=Release
+
+    - name: Build Webcam Report Tool
+      run: |
+        nuget restore tools\WebcamReportTool\WebcamReportTool.sln
+        msbuild tools\WebcamReportTool\WebcamReportTool.sln -p:Platform=x64 -p:Configuration=Release
+
+    - name: Build Styles Report Tool
+      run: |
+        nuget restore tools\StylesReportTool\StylesReportTool.sln
+        msbuild tools\StylesReportTool\StylesReportTool.sln -p:Platform=x64 -p:Configuration=Release
+
+    - name: Build Installer
+      run: |
+        msbuild installer\PowerToysSetup.sln -p:Platform=x64 -p:Configuration=Release
+
+    - name: Upload Installer
+      uses: actions/upload-artifact@v3
+      with:
+        name: PowerToys-Installer
+        path: installer\PowerToysSetup\x64\Release\PowerToysSetup.exe
