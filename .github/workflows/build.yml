@@ -35,28 +35,9 @@ jobs:
     - name: Build PowerToys Solution
       run: |
         msbuild PowerToys.sln -p:Platform=x64 -p:Configuration=Release -p:TreatWarningsAsErrors=false
-
-    - name: Build Bug Report Tool
-      run: |
-        nuget restore tools\BugReportTool\BugReportTool.sln
-        msbuild tools\BugReportTool\BugReportTool.sln -p:Platform=x64 -p:Configuration=Release -p:TreatWarningsAsErrors=false
-
-    - name: Build Webcam Report Tool
-      run: |
-        nuget restore tools\WebcamReportTool\WebcamReportTool.sln
-        msbuild tools\WebcamReportTool\WebcamReportTool.sln -p:Platform=x64 -p:Configuration=Release -p:TreatWarningsAsErrors=false
-
-    - name: Build Styles Report Tool
-      run: |
-        nuget restore tools\StylesReportTool\StylesReportTool.sln
-        msbuild tools\StylesReportTool\StylesReportTool.sln -p:Platform=x64 -p:Configuration=Release -p:TreatWarningsAsErrors=false
-
-    - name: Build Installer
-      run: |
-        msbuild installer\PowerToysSetup.sln -p:Platform=x64 -p:Configuration=Release -p:TreatWarningsAsErrors=false
-
+        
     - name: Upload Installer
       uses: actions/upload-artifact@v3
       with:
         name: PowerToys-Installer
-        path: installer\PowerToysSetup\x64\Release\PowerToysSetup.msi
+        path: x64\Release\PowerToysS.exe
