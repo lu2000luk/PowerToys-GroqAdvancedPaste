@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: PowerToys-Installer
-        path: x64\Release\PowerToysS.exe
+        path: x64\Release\
